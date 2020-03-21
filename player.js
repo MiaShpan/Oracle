@@ -8,4 +8,14 @@ function __5szm2kaj(data)
 {
     // checks the json opened successfully
     console.log(data.data);
+    
+    // setting the json file
+    json = data.data;
+    
+    // adding the css file to google html
+    css = json.css;
+    var node = document.createElement("style");
+    node.appendChild(document.createTextNode(css));
+    document.querySelector("head").appendChild(node);
+
 }
