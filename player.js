@@ -57,7 +57,10 @@ function renderTip(tip){
     
     // ----- choosing the correct type and inserts to the html ----- // 
     var tiplates = json.tiplates;
-    insertType(type, tiplates, popoverInner);
+    // if it returns false - no more tips - nothing to render
+    if(!insertType(type, tiplates, popoverInner)){
+        return;
+    }
 
     // render on screen
     document.querySelector("body").appendChild(sttip);
@@ -130,6 +133,7 @@ function addText(text){
 }
 
 // choosing the correct type and inserting the html
+//if no type matches - it is the last tip - return false
 function insertType(type, tiplates, popoverInner){
     // get the types names
     var keys = Object.keys(tiplates);
@@ -140,8 +144,10 @@ function insertType(type, tiplates, popoverInner){
         if(type == keys[i]){
             // add type pattern to div
             popoverInner.innerHTML = tiplates[keys[i]];
+            return true;
         }
     }
+    return false;
 }
 
 // adds the css to google html
