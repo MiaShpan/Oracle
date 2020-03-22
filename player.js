@@ -41,9 +41,8 @@ function renderTip(tip){
     var type = tip.action.type;
     var text = tip.action.contents["#content"];
     var stepNum = tip.action.stepOrdinal;
+    var  next = tip.followers[0].next;
 
-    // ----- finding the classes ----- //
-    var tipClasses = classes(tip);
 
     // ----- creating the divs ----- //
     var sttip = document.createElement("div");
@@ -83,13 +82,22 @@ function renderTip(tip){
 
     // next btn 
     var nextbtn = document.querySelector("[data-iridize-role='nextBt']");
-    nextbtn.setAttribute("href", `javascript:nextTip(${id});`);
+    nextbtn.setAttribute("href", `javascript:nextTip(${next});`);
 
 }
 
 // next tip 
 function nextTip(id){
-    console.log(id);
+    // closing prev tip
+    var lastTip = document.querySelector(".sttip");
+    close(lastTip);
+
+    // rendring this tip
+    for (var i = 0; i < numberOfSteps; i++){
+        if(json.structure.steps[i].id == id){
+            renderTip(json.structure.steps[i]);
+        }
+    }
 }
 
 // closing the window
