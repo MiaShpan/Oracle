@@ -93,6 +93,14 @@ function renderTip(tip){
         nextTip(next);
     });
 
+    // prev btn
+    var prevBtn = document.querySelector("[data-iridize-role='prevBt']");
+    console.log(prevBtn);
+    prevBtn.addEventListener("click", function(){
+        console.log("back");
+        prevTip(id);
+    });
+
 }
 
 // next tip 
@@ -105,6 +113,21 @@ function nextTip(id){
     for (var i = 0; i < numberOfSteps; i++){
         if(json.structure.steps[i].id == id){
             renderTip(json.structure.steps[i]);
+        }
+    }
+}
+
+function prevTip(id){
+    console.log("back");
+    // closing last tip
+    var currentTip = document.querySelector(".sttip");
+    close(currentTip);
+    
+    var prevTipIndex;
+    // rendring this tip
+    for (var i = 0; i < numberOfSteps; i++){
+        if(json.structure.steps[i].id == id){
+            renderTip(json.structure.steps[i-1]);
         }
     }
 }
