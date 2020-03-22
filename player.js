@@ -10,73 +10,91 @@ function __5szm2kaj(data)
     console.log(data.data);
     
     // setting the json file
-    json = data.data;
+    var json = data.data;
     
-    // ---------- adding the css file to google html ---------- //
-    css = json.css;
-    var node = document.createElement("style");
-    node.appendChild(document.createTextNode(css));
-    document.querySelector("head").appendChild(node);
-
+    // ----------- adding the css file to google html ----------- //
+    addsCSS(json.css);
+    
     // ----------- render first tip ----------- ֿֿ//
 
-    var tip1 = json.structure.steps[0];
-    var id = tip1.id;
-    var type = tip1.action.type;
-    var text = tip1.action.contents["#content"];
+    var tip = json.structure.steps[0];
+    var id = tip.id;
+    var type = tip.action.type;
+    var text = tip.action.contents["#content"];
     var numberOfSteps = json.structure.steps.length;
-    var stepNum = tip1.action.stepOrdinal;
+    var stepNum = tip.action.stepOrdinal;
 
-    
     // ----- finding the classes ----- //
-    
-    //adding "placment" class
-    var tipClasses = [tip1.action.placement];
-
-    // adding classes from "classes"
-    // if there are more than one class
-    if(Array.isArray(tip1.action.classes)){
-        for(var i = 0; i < tip1.action.classes.length; i++){
-            tipClasses.push(tip1.action.classes[i]);
-        }
-    } else {
-        tipClasses.push(tip1.action.classes);
-    }
-
+    var tipClasses = classes(tip);
 
     // ----- creating the divs ----- //
     var sttip = document.createElement("div");
-    sttip.classList.add("sttip");
-    
     var tooltip = document.createElement("div")
+    var panelContainer = document.createElement("div");
+    var guideContent = document.createElement("div");
+    var popoverInner = document.createElement("div");
+
+    // bulding the divs
+    buildDivs(sttip, tooltip, panelContainer, guideContent, popoverInner, tipClasses);
+    
+    // ----- choosing the correct type and inserts to the html ----- // 
+    var tiplates = json.tiplates;
+    insertType(type, tiplates, popoverInner);
+
+    // render on screen
+    document.querySelector("body").appendChild(sttip);
+
+    // adding tip text
+    addText(text);
+
+    // adding step num out of number of steps 
+    addStepsCounter(stepNum, numberOfSteps)
+}
+
+//adds stpes counter
+function addStepsCounter(stepNum, numberOfSteps){
+    var stepsCounter = document.querySelector("[data-iridize-role='stepCount']");
+    stepsCounter.textContent = stepNum;
+    document.querySelector("span [data-iridize-role='stepCount']+span").textContent = numberOfSteps;
+}
+
+// builds the divs
+function buildDivs(sttip, tooltip, panelContainer, guideContent, popoverInner, tipClasses){
+    
+    // adding classes
+    sttip.classList.add("sttip");
+
     tooltip.classList.add("tooltip");
     tooltip.classList.add("in");
-    
+
     // adding the tip classes
     for (var i = 0; i < tipClasses.length; i++){
         tooltip.classList.add(tipClasses[i]);
     }
 
-    var panelContainer = document.createElement("div");
     panelContainer.classList.add("panel-container");
-    var guideContent = document.createElement("div");
     guideContent.classList.add("guide-content");
-    var popoverInner = document.createElement("div");
     popoverInner.classList.add("popover-inner");
 
-    // bulding the divs
+    // appending the divs
     guideContent.appendChild(popoverInner);
     panelContainer.appendChild(guideContent);
     tooltip.appendChild(panelContainer);
     sttip.appendChild(tooltip);
+}
 
-    // ----- choosing the correct type ----- // 
-    var tiplates = json.tiplates;
+// adding tip text
+function addText(text){
+    var contentDiv = document.querySelector("[data-iridize-id='content']");
+    contentDiv.innerHTML = text;
+}
 
+// choosing the correct type and inserting the html
+function insertType(type, tiplates, popoverInner){
     // get the types names
     var keys = Object.keys(tiplates);
-    
-    // search which type is tip1 type
+
+    // search which type is tip type
     for(var i = 0; i < keys.length; i++){
         // this is the type
         if(type == keys[i]){
@@ -84,17 +102,29 @@ function __5szm2kaj(data)
             popoverInner.innerHTML = tiplates[keys[i]];
         }
     }
-
-    // render on screen
-    document.querySelector("body").appendChild(sttip);
-
-    // adding tip text
-    var contentDiv = document.querySelector("[data-iridize-id='content']");
-    contentDiv.innerHTML = text;
-
-    // adding step num out of number of steps 
-    var stepsCounter = document.querySelector("[data-iridize-role='stepCount']");
-    stepsCounter.textContent = stepNum;
-    document.querySelector("span [data-iridize-role='stepCount']+span").textContent = numberOfSteps;
-  
 }
+
+// adds the css to google html
+function addsCSS(css){
+    var node = document.createElement("style");
+    node.appendChild(document.createTextNode(css));
+    document.querySelector("head").appendChild(node);
+}
+
+// return all tip classes
+function classes(tip){
+    var arr = [tip.action.placement];
+
+    // adding classes from "classes"
+    // if there are more than one class
+    if(Array.isArray(tip.action.classes)){
+        for(var i = 0; i < tip.action.classes.length; i++){
+            arr.push(tip.action.classes[i]);
+        }
+    } else {
+        arr.push(tip.action.classes);
+    }
+
+    return arr;
+}
+
