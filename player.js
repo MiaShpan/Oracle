@@ -94,7 +94,7 @@ function nextTip(id){
 
 // closing the window
 function close(sttip){
-    sttip.style.visibility = "hidden";
+    sttip.parentNode.removeChild(sttip);
 }
 
 //adds stpes counter
