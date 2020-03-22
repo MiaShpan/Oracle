@@ -53,7 +53,7 @@ function renderTip(tip){
     var popoverInner = document.createElement("div");
 
     // bulding the divs
-    buildDivs(sttip, tooltip, panelContainer, guideContent, popoverInner, tipClasses);
+    buildDivs(tip, sttip, tooltip, panelContainer, guideContent, popoverInner);
     
     // ----- choosing the correct type and inserts to the html ----- // 
     var tiplates = json.tiplates;
@@ -104,18 +104,13 @@ function addStepsCounter(stepNum, numberOfSteps){
 
 
 // builds the divs
-function buildDivs(sttip, tooltip, panelContainer, guideContent, popoverInner, tipClasses){
+function buildDivs(tip, sttip, tooltip, panelContainer, guideContent, popoverInner){
     
     // adding classes
     sttip.classList.add("sttip");
 
-    tooltip.classList.add("tooltip");
-    tooltip.classList.add("in");
-
-    // adding the tip classes
-    for (var i = 0; i < tipClasses.length; i++){
-        tooltip.classList.add(tipClasses[i]);
-    }
+    // classes are the tip classes
+    tooltip.setAttribute("class", `tooltip in ${classes(tip)}`);
 
     panelContainer.classList.add("panel-container");
     guideContent.classList.add("guide-content");
@@ -156,20 +151,9 @@ function addsCSS(css){
     document.querySelector("head").appendChild(node);
 }
 
-// return all tip classes
+// return all tip classes in a string
 function classes(tip){
-    var arr = [tip.action.placement];
-
-    // adding classes from "classes"
-    // if there are more than one class
-    if(Array.isArray(tip.action.classes)){
-        for(var i = 0; i < tip.action.classes.length; i++){
-            arr.push(tip.action.classes[i]);
-        }
-    } else {
-        arr.push(tip.action.classes);
-    }
-
-    return arr;
+    var str = tip.action.placement.concat(` ${tip.action.classes}`);
+    return str;
 }
 
