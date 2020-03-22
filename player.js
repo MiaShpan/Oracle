@@ -89,5 +89,10 @@ function __5szm2kaj(data)
     // adding tip text
     var contentDiv = document.querySelector("[data-iridize-id='content']");
     contentDiv.innerHTML = text;
+
+    // adding step num out of number of steps 
+    var stepsCounter = document.querySelector("[data-iridize-role='stepCount']");
+    stepsCounter.textContent = stepNum;
+    document.querySelector("span [data-iridize-role='stepCount']+span").textContent = numberOfSteps;
   
 }
