@@ -23,18 +23,23 @@ function __5szm2kaj(data)
     console.log(data.data);
     
     // setting the json file
-    var json = data.data;
+    json = data.data;
+    numberOfSteps = json.structure.steps.length;
     
     // ----------- adding the css file to google html ----------- //
     addsCSS(json.css);
     
     // ----------- render first tip ----------- ֿֿ//
+    renderTip(json.structure.steps[0]);
+    
+}
 
-    var tip = json.structure.steps[0];
+// render tip
+function renderTip(tip){
+
     var id = tip.id;
     var type = tip.action.type;
     var text = tip.action.contents["#content"];
-    var numberOfSteps = json.structure.steps.length;
     var stepNum = tip.action.stepOrdinal;
 
     // ----- finding the classes ----- //
@@ -76,6 +81,7 @@ function __5szm2kaj(data)
     // next btn 
     var nextbtn = document.querySelector("[data-iridize-role='nextBt']");
     nextbtn.setAttribute("href", `javascript:nextTip(${id});`);
+
 }
 
 // next tip 
