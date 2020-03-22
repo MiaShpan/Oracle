@@ -42,6 +42,8 @@ function renderTip(tip){
     var text = tip.action.contents["#content"];
     var stepNum = tip.action.stepOrdinal;
     var  next = tip.followers[0].next;
+    var selector = tip.action.selector;
+
 
 
     // ----- creating the divs ----- //
@@ -83,6 +85,13 @@ function renderTip(tip){
     // next btn 
     var nextbtn = document.querySelector("[data-iridize-role='nextBt']");
     nextbtn.setAttribute("href", `javascript:nextTip(${next});`);
+
+    // selector 
+    // todo: fix - goes to the next page and abonded this js
+    var selectorBtn = $(selector);
+    $(selectorBtn).click(function() {
+        nextTip(next);
+    });
 
 }
 
