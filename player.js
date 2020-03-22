@@ -23,6 +23,8 @@ function __5szm2kaj(data)
     var tip1 = json.structure.steps[0];
     var id = tip1.id;
     var type = tip1.action.type;
+    var text = tip1.action.contents["#content"];
+
     
     // ----- finding the classes ----- //
     
@@ -83,5 +85,9 @@ function __5szm2kaj(data)
 
     // render on screen
     document.querySelector("body").appendChild(sttip);
+
+    // adding tip text
+    var contentDiv = document.querySelector("[data-iridize-id='content']");
+    contentDiv.innerHTML = text;
   
 }
