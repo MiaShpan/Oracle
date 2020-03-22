@@ -24,6 +24,8 @@ function __5szm2kaj(data)
     var id = tip1.id;
     var type = tip1.action.type;
     var text = tip1.action.contents["#content"];
+    var numberOfSteps = json.structure.steps.length;
+    var stepNum = tip1.action.stepOrdinal;
 
     
     // ----- finding the classes ----- //
