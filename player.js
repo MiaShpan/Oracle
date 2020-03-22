@@ -60,9 +60,17 @@ function __5szm2kaj(data)
         close(sttip);
     });
 
-    
+    // next btn 
+    var nextbtn = document.querySelector("[data-iridize-role='nextBt']");
+    nextbtn.setAttribute("href", `javascript:nextTip(${id});`);
 }
 
+// next tip 
+function nextTip(id){
+    console.log(id);
+}
+
+// closing the window
 function close(sttip){
     sttip.style.visibility = "hidden";
 }
