@@ -49,6 +49,22 @@ function __5szm2kaj(data)
 
     // adding step num out of number of steps 
     addStepsCounter(stepNum, numberOfSteps)
+
+    // adding the close btn 
+    var closeBtn = document.querySelector("[data-iridize-role='closeBt']");
+    closeBtn.addEventListener("click", function(){
+        close(sttip);
+    });
+    var tryLaterBtn = document.querySelector("[data-iridize-role='laterBt']");
+    tryLaterBtn.addEventListener("click", function(){
+        close(sttip);
+    });
+
+    
+}
+
+function close(sttip){
+    sttip.style.visibility = "hidden";
 }
 
 //adds stpes counter
@@ -57,6 +73,8 @@ function addStepsCounter(stepNum, numberOfSteps){
     stepsCounter.textContent = stepNum;
     document.querySelector("span [data-iridize-role='stepCount']+span").textContent = numberOfSteps;
 }
+
+
 
 // builds the divs
 function buildDivs(sttip, tooltip, panelContainer, guideContent, popoverInner, tipClasses){
