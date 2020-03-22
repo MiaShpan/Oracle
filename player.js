@@ -1,8 +1,21 @@
-// gets the json file 
-var script = document.createElement('script');
-script.src = 'https://guidedlearning.oracle.com/player/latest/api/scenario/get/v_IlPvRLRWObwLnV5sTOaw/5szm2kaj/?callback=__5szm2kaj&refresh=true&env=dev&type=startPanel&vars%5Btype%5D=startPanel&sid=none&_=1582203987867?callback=__5szm2kaj';
+//adding jQuery script to html
+var script = document.createElement('script');script.src = "https://code.jquery.com/jquery-3.4.1.js"
+integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+crossorigin="anonymous";
 
-document.getElementsByTagName('head')[0].appendChild(script);
+script.onload = function(){
+    start();
+}
+document.getElementsByTagName('head')[0].appendChild(script);  
+
+function start(){
+
+    // gets the json file 
+    var script = document.createElement('script');
+    script.src = 'https://guidedlearning.oracle.com/player/latest/api/scenario/get/v_IlPvRLRWObwLnV5sTOaw/5szm2kaj/?callback=__5szm2kaj&refresh=true&env=dev&type=startPanel&vars%5Btype%5D=startPanel&sid=none&_=1582203987867?callback=__5szm2kaj';
+    
+    document.getElementsByTagName('head')[0].appendChild(script);
+}
 
 function __5szm2kaj(data)
 {
