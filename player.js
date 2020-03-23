@@ -24,7 +24,7 @@ function __5szm2kaj(data)
     
     // setting the json file
     json = data.data;
-    numberOfSteps = json.structure.steps.length;
+    numberOfSteps = parseInt(json.structure.steps.length);
     
     // ----------- adding the css file to google html ----------- //
     addsCSS(json.css);
@@ -70,7 +70,7 @@ function renderTip(tip){
     addText(text);
 
     // adding step num out of number of steps 
-    addStepsCounter(stepNum, numberOfSteps)
+    addStepsCounter(id, numberOfSteps-1)
 
     // adding the close btn 
     var closeBtn = document.querySelector("[data-iridize-role='closeBt']");
@@ -138,10 +138,24 @@ function close(sttip){
 }
 
 //adds stpes counter
-function addStepsCounter(stepNum, numberOfSteps){
+function addStepsCounter(id, numberOfSteps){
+    var stepNum = stepNumCounter(id);
+
     var stepsCounter = document.querySelector("[data-iridize-role='stepCount']");
     stepsCounter.textContent = stepNum;
     document.querySelector("span [data-iridize-role='stepCount']+span").textContent = numberOfSteps;
+}
+
+// count which step number is this tip
+function stepNumCounter(id){
+    var counter = 0;
+    for(var i = 0; i < numberOfSteps; i++){
+        counter = counter + 1;
+        if(json.structure.steps[i].id == id){
+            return counter;
+        }
+    }
+    return counter;
 }
 
 
