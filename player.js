@@ -95,6 +95,10 @@ function renderTip(tip){
         //to do fix selector
         var selectorBtn = $(selector);
 
+        // fix - renoves the slector link to a new page
+        selectorBtn.removeAttr("href"); 
+
+
         $(selectorBtn).click(function() {
             lastTip(next);
         });
@@ -107,6 +111,8 @@ function renderTip(tip){
         // selector 
         // todo: fix - goes to the next page and abonded this js
         var selectorBtn = $(selector);
+        // fix - renoves the slector link to a new page
+        selectorBtn.removeAttr("href");
         $(selectorBtn).click(function() {
             nextTip(next);
         }); 
