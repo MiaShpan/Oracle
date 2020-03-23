@@ -40,11 +40,8 @@ function renderTip(tip){
     var id = tip.id;
     var type = tip.action.type;
     var text = tip.action.contents["#content"];
-    var stepNum = tip.action.stepOrdinal;
     var  next = tip.followers[0].next;
     var selector = tip.action.selector;
-
-
 
     // ----- creating the divs ----- //
     var sttip = document.createElement("div");
@@ -82,17 +79,6 @@ function renderTip(tip){
         close(sttip);
     });
 
-    // next btn 
-    var nextbtn = document.querySelector("[data-iridize-role='nextBt']");
-    nextbtn.setAttribute("href", `javascript:nextTip(${next});`);
-
-    // selector 
-    // todo: fix - goes to the next page and abonded this js
-    var selectorBtn = $(selector);
-    $(selectorBtn).click(function() {
-        nextTip(next);
-    });
-
     // prev btn
     var prevBtn = document.querySelector("[data-iridize-role='prevBt']");
     console.log(prevBtn);
@@ -101,6 +87,44 @@ function renderTip(tip){
         prevTip(id);
     });
 
+    if(isLast(id)){
+        // next btn 
+        var nextbtn = document.querySelector("[data-iridize-role='nextBt']");
+        nextbtn.setAttribute("href", `javascript:lastTip();`);
+
+        //to do fix selector
+        var selectorBtn = $(selector);
+
+        $(selectorBtn).click(function() {
+            lastTip(next);
+        });
+    }
+    else{
+       // next btn 
+        var nextbtn = document.querySelector("[data-iridize-role='nextBt']");
+        nextbtn.setAttribute("href", `javascript:nextTip(${next});`);
+
+        // selector 
+        // todo: fix - goes to the next page and abonded this js
+        var selectorBtn = $(selector);
+        $(selectorBtn).click(function() {
+            nextTip(next);
+        }); 
+    } 
+
+}
+
+function lastTip(){
+        window.alert("This is the last tip");
+}
+
+function isLast(id){
+    if(stepNumCounter(id)==numberOfSteps - 1){
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
 // next tip 
@@ -118,18 +142,27 @@ function nextTip(id){
 }
 
 function prevTip(id){
-    console.log("back");
-    // closing last tip
-    var currentTip = document.querySelector(".sttip");
-    close(currentTip);
-    
     var prevTipIndex;
-    // rendring this tip
+
     for (var i = 0; i < numberOfSteps; i++){
         if(json.structure.steps[i].id == id){
-            renderTip(json.structure.steps[i-1]);
+            prevTipIndex = i - 1;
+            break;
         }
     }
+    // the current tip is not the first one
+    if(prevTipIndex != -1){
+        // closing current tip
+        var currentTip = document.querySelector(".sttip");
+        close(currentTip);
+
+        // rendring prev tip
+        renderTip(json.structure.steps[prevTipIndex]);
+
+    } else {
+        window.alert("This is the first tip");
+        return;
+    }   
 }
 
 // closing the window
