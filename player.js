@@ -40,7 +40,7 @@ function renderTip(tip){
     var id = tip.id;
     var type = tip.action.type;
     var text = tip.action.contents["#content"];
-    var  next = tip.followers[0].next;
+    var next = tip.followers[0].next;
     var selector = tip.action.selector;
 
     // ----- creating the divs ----- //
@@ -69,7 +69,7 @@ function renderTip(tip){
     // adding step num out of number of steps 
     addStepsCounter(id, numberOfSteps-1)
 
-    // adding the close btn 
+    // adding the close btn and "remind me later" btn
     var closeBtn = document.querySelector("[data-iridize-role='closeBt']");
     closeBtn.addEventListener("click", function(){
         close(sttip);
@@ -79,14 +79,14 @@ function renderTip(tip){
         close(sttip);
     });
 
-    // prev btn
+    // adds prev btn
     var prevBtn = document.querySelector("[data-iridize-role='prevBt']");
-    console.log(prevBtn);
     prevBtn.addEventListener("click", function(){
-        console.log("back");
         prevTip(id);
     });
 
+    // if this is the last tip
+    // pushing next btn wont render next tip
     if(isLast(id)){
         // next btn 
         var nextbtn = document.querySelector("[data-iridize-role='nextBt']");
@@ -94,36 +94,37 @@ function renderTip(tip){
 
         //to do fix selector
         var selectorBtn = $(selector);
-
-        // fix - renoves the slector link to a new page
+        // fix - removes the selector link to a new page 
+        //so we stay in current page and the code keeps runing
         selectorBtn.removeAttr("href"); 
-
-
         $(selectorBtn).click(function() {
             lastTip(next);
         });
     }
+    // this is not the last tip
     else{
-       // next btn 
+        // next btn 
         var nextbtn = document.querySelector("[data-iridize-role='nextBt']");
         nextbtn.setAttribute("href", `javascript:nextTip(${next});`);
 
         // selector 
         // todo: fix - goes to the next page and abonded this js
         var selectorBtn = $(selector);
-        // fix - renoves the slector link to a new page
+        // fix - removes the selector link to a new page 
+        //so we stay in current page and the code keeps runing        
         selectorBtn.removeAttr("href");
         $(selectorBtn).click(function() {
             nextTip(next);
         }); 
     } 
-
 }
 
+// render a messege on the screen
 function lastTip(){
         window.alert("This is the last tip");
 }
-
+// checks if tip'id' is the last tip
+// return true if it is
 function isLast(id){
     if(stepNumCounter(id)==numberOfSteps - 1){
         return true;
@@ -133,7 +134,7 @@ function isLast(id){
     }
 }
 
-// next tip 
+// handels the rendring of the next string 
 function nextTip(id){
     // closing prev tip
     var lastTip = document.querySelector(".sttip");
@@ -147,6 +148,7 @@ function nextTip(id){
     }
 }
 
+// handels the rendring of the prev tip
 function prevTip(id){
     var prevTipIndex;
 
@@ -165,7 +167,9 @@ function prevTip(id){
         // rendring prev tip
         renderTip(json.structure.steps[prevTipIndex]);
 
-    } else {
+    }
+    // the current tip is the first tip
+    else {
         window.alert("This is the first tip");
         return;
     }   
@@ -226,7 +230,7 @@ function addText(text){
 }
 
 // choosing the correct type and inserting the html
-//if no type matches - it is the last tip - return false
+// if no type matches - it is the last tip - return false
 function insertType(type, tiplates, popoverInner){
     // get the types names
     var keys = Object.keys(tiplates);
