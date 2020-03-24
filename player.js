@@ -20,10 +20,6 @@ function start(){
 
 function __5szm2kaj(data){
     
-    // prints the json to see it opened successfully
-    // todo: remove
-    console.log(data.data);
-    
     // setting the json file
     json = data.data;
     // setting the number of steps 
@@ -52,7 +48,6 @@ function __5szm2kaj(data){
         // render tip number "id"
         renderNextTipFromStorage(id);
     }
-
 }
 
 // render tip
@@ -112,6 +107,18 @@ function renderTip(tip){
         nextbtn.setAttribute("href", `javascript:lastTip();`);
 
         var selectorBtn = $(selector);
+
+        //if the selector was found
+        // set tip to be in selector position
+        if(selectorBtn.length){
+            
+            // gets selector position
+            var leftPos  = selectorBtn.offset().left;
+            var topPos   = selectorBtn.offset().top;
+            // sets tip position
+            $(".sttip").offset({top:topPos,left:leftPos});
+        }
+
         $(selectorBtn).click(function() {
             lastTip(next);
         });
@@ -125,6 +132,17 @@ function renderTip(tip){
         // selector 
         // in the next page the code will be reloaded
         var selectorBtn = $(selector);
+
+        //if the selector was found
+        // set tip to be in selector position
+        if(selectorBtn.length){
+            
+            // gets selector position
+            var leftPos  = selectorBtn.offset().left;
+            var topPos   = selectorBtn.offset().top;
+            // sets tip position
+            $(".sttip").offset({top:topPos,left:leftPos});
+        }
      
         $(selectorBtn).click(function() {
             // the btn will link to a new page where the code will reload
