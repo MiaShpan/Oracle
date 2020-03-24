@@ -17,8 +17,8 @@ function start(){
     document.getElementsByTagName('head')[0].appendChild(script);
 }
 
-function __5szm2kaj(data)
-{
+function __5szm2kaj(data){
+    
     // checks the json opened successfully
     console.log(data.data);
     
@@ -29,9 +29,24 @@ function __5szm2kaj(data)
     // ----------- adding the css file to google html ----------- //
     addsCSS(json.css);
     
-    // ----------- render first tip ----------- ֿֿ//
-    renderTip(json.structure.steps[0]);
-    
+    // checks if this is the first run
+    let id = sessionStorage.getItem('id') ?
+    sessionStorage.getItem('id') : null;
+
+    // this is the first run
+    if (id == null){
+        console.log("i am on my first run")
+
+       // ----------- render first tip ----------- ֿֿ//
+        renderTip(json.structure.steps[0]); 
+    } 
+    // this is not the first run
+    // render tip number "id"
+    else {
+        console.log("i am not on my first run")
+        renderNextTipFromStorage(id);
+    }
+
 }
 
 // render tip
@@ -92,11 +107,7 @@ function renderTip(tip){
         var nextbtn = document.querySelector("[data-iridize-role='nextBt']");
         nextbtn.setAttribute("href", `javascript:lastTip();`);
 
-        //to do fix selector
         var selectorBtn = $(selector);
-        // fix - removes the selector link to a new page 
-        //so we stay in current page and the code keeps runing
-        selectorBtn.removeAttr("href"); 
         $(selectorBtn).click(function() {
             lastTip(next);
         });
@@ -108,21 +119,34 @@ function renderTip(tip){
         nextbtn.setAttribute("href", `javascript:nextTip(${next});`);
 
         // selector 
-        // todo: fix - goes to the next page and abonded this js
+        // in the next page the code will be reloaded
         var selectorBtn = $(selector);
-        // fix - removes the selector link to a new page 
-        //so we stay in current page and the code keeps runing        
-        selectorBtn.removeAttr("href");
+        console.log(selectorBtn.attr("href"));
+     
         $(selectorBtn).click(function() {
-            nextTip(next);
+            // the btn will link to a new page where the code will reload
+            // need to save the state in the sessionStorage
+            if(selectorBtn.attr("href") != null){
+                console.log("ia am setting the sessionStorage")
+                sessionStorage.setItem("id", next);
+            }
+            // the button will not link to a new page
+            // render next tip
+            else {
+                nextTip(next);
+            }
+
         }); 
     } 
 }
+
+
 
 // render a messege on the screen
 function lastTip(){
         window.alert("This is the last tip");
 }
+
 // checks if tip'id' is the last tip
 // return true if it is
 function isLast(id){
@@ -131,6 +155,15 @@ function isLast(id){
     }
     else{
         return false;
+    }
+}
+
+function renderNextTipFromStorage(id){
+    // rendring this tip
+    for (var i = 0; i < numberOfSteps; i++){
+        if(json.structure.steps[i].id == id){
+            renderTip(json.structure.steps[i]);
+        }
     }
 }
 
