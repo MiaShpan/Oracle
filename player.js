@@ -4,6 +4,7 @@ integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
 crossorigin="anonymous";
 
 script.onload = function(){
+    // when jQuery loads start 
     start();
 }
 document.getElementsByTagName('head')[0].appendChild(script);  
@@ -19,11 +20,13 @@ function start(){
 
 function __5szm2kaj(data){
     
-    // checks the json opened successfully
+    // prints the json to see it opened successfully
+    // todo: remove
     console.log(data.data);
     
     // setting the json file
     json = data.data;
+    // setting the number of steps 
     numberOfSteps = parseInt(json.structure.steps.length);
     
     // ----------- adding the css file to google html ----------- //
@@ -35,15 +38,18 @@ function __5szm2kaj(data){
 
     // this is the first run
     if (id == null){
+        // todo: remove
         console.log("i am on my first run")
 
        // ----------- render first tip ----------- ֿֿ//
         renderTip(json.structure.steps[0]); 
     } 
     // this is not the first run
-    // render tip number "id"
     else {
+        // todo: remove
         console.log("i am not on my first run")
+
+        // render tip number "id"
         renderNextTipFromStorage(id);
     }
 
@@ -52,11 +58,14 @@ function __5szm2kaj(data){
 // render tip
 function renderTip(tip){
 
+    // ----- Variables ----- //
     var id = tip.id;
     var type = tip.action.type;
     var text = tip.action.contents["#content"];
     var next = tip.followers[0].next;
     var selector = tip.action.selector;
+    var tiplates = json.tiplates;
+
 
     // ----- creating the divs ----- //
     var sttip = document.createElement("div");
@@ -69,30 +78,25 @@ function renderTip(tip){
     buildDivs(tip, sttip, tooltip, panelContainer, guideContent, popoverInner);
     
     // ----- choosing the correct type and inserts to the html ----- // 
-    var tiplates = json.tiplates;
     // if it returns false - no more tips - nothing to render
     if(!insertType(type, tiplates, popoverInner)){
         return;
     }
 
-    // render on screen
+    // renders on screen
     document.querySelector("body").appendChild(sttip);
 
-    // adding tip text
+    // adds tip text
     addText(text);
 
-    // adding step num out of number of steps 
-    addStepsCounter(id, numberOfSteps-1)
+    // adds step num out of number of steps 
+    addStepsCounter(id, numberOfSteps - 1);
 
-    // adding the close btn and "remind me later" btn
-    var closeBtn = document.querySelector("[data-iridize-role='closeBt']");
-    closeBtn.addEventListener("click", function(){
-        close(sttip);
-    });
-    var tryLaterBtn = document.querySelector("[data-iridize-role='laterBt']");
-    tryLaterBtn.addEventListener("click", function(){
-        close(sttip);
-    });
+    // adds the close btn 
+    addClosingBtn(document.querySelector("[data-iridize-role='closeBt']"), sttip);
+    
+    // adds "remind me later" btn
+    addClosingBtn(document.querySelector("[data-iridize-role='laterBt']"), sttip);
 
     // adds prev btn
     var prevBtn = document.querySelector("[data-iridize-role='prevBt']");
@@ -121,13 +125,11 @@ function renderTip(tip){
         // selector 
         // in the next page the code will be reloaded
         var selectorBtn = $(selector);
-        console.log(selectorBtn.attr("href"));
      
         $(selectorBtn).click(function() {
             // the btn will link to a new page where the code will reload
             // need to save the state in the sessionStorage
             if(selectorBtn.attr("href") != null){
-                console.log("ia am setting the sessionStorage")
                 sessionStorage.setItem("id", next);
             }
             // the button will not link to a new page
@@ -140,9 +142,14 @@ function renderTip(tip){
     } 
 }
 
+// adds event for closing btn
+function addClosingBtn(btn, sttip){
+    btn.addEventListener("click", function(){
+        close(sttip);
+    });
+}
 
-
-// render a messege on the screen
+// renders a messege on the screen
 function lastTip(){
         window.alert("This is the last tip");
 }
@@ -158,8 +165,14 @@ function isLast(id){
     }
 }
 
+// renders the tip when script is reloaded
 function renderNextTipFromStorage(id){
-    // rendring this tip
+    sendToRender(id);
+}
+
+// sends the correct tip given it's id to render
+function sendToRender(id){
+    // render tip <id>
     for (var i = 0; i < numberOfSteps; i++){
         if(json.structure.steps[i].id == id){
             renderTip(json.structure.steps[i]);
@@ -169,20 +182,17 @@ function renderNextTipFromStorage(id){
 
 // handels the rendring of the next string 
 function nextTip(id){
-    // closing prev tip
+    // close prev tip
     var lastTip = document.querySelector(".sttip");
     close(lastTip);
 
-    // rendring this tip
-    for (var i = 0; i < numberOfSteps; i++){
-        if(json.structure.steps[i].id == id){
-            renderTip(json.structure.steps[i]);
-        }
-    }
+    // renders this tip
+    sendToRender(id);
 }
 
 // handels the rendring of the prev tip
 function prevTip(id){
+    
     var prevTipIndex;
 
     for (var i = 0; i < numberOfSteps; i++){
@@ -208,7 +218,7 @@ function prevTip(id){
     }   
 }
 
-// closing the window
+// closes the window
 function close(sttip){
     sttip.parentNode.removeChild(sttip);
 }
