@@ -13,12 +13,18 @@ function start(){
 
     // gets the json file 
     var script = document.createElement('script');
+    // json link
     script.src = 'https://guidedlearning.oracle.com/player/latest/api/scenario/get/v_IlPvRLRWObwLnV5sTOaw/5szm2kaj/?callback=__5szm2kaj&refresh=true&env=dev&type=startPanel&vars%5Btype%5D=startPanel&sid=none&_=1582203987867?callback=__5szm2kaj';
     
     document.getElementsByTagName('head')[0].appendChild(script);
 }
 
 function __5szm2kaj(data){
+
+    if(data == null){
+        window.alert(`JSON file is null`);
+        return;
+    }
     
     // setting the json file
     json = data.data;
@@ -34,16 +40,12 @@ function __5szm2kaj(data){
 
     // this is the first run
     if (id == null){
-        // todo: remove
-        console.log("i am on my first run")
 
        // ----------- render first tip ----------- ֿֿ//
         renderTip(json.structure.steps[0]); 
     } 
     // this is not the first run
     else {
-        // todo: remove
-        console.log("i am not on my first run")
 
         // render tip number "id"
         renderNextTipFromStorage(id);
@@ -53,6 +55,11 @@ function __5szm2kaj(data){
 // render tip
 function renderTip(tip){
 
+    if(tip == null){
+        window.alert(`You sent a null tip`);
+        return;
+    }
+
     // ----- Variables ----- //
     var id = tip.id;
     var type = tip.action.type;
@@ -60,6 +67,11 @@ function renderTip(tip){
     var next = tip.followers[0].next;
     var selector = tip.action.selector;
     var tiplates = json.tiplates;
+
+    if(id == null || type == null || text == null || next == null || selector == null || tiplates == null){
+        window.alert(`json is missing arguments in tip ${id}`);
+        return;
+    }
 
 
     // ----- creating the divs ----- //
@@ -73,7 +85,7 @@ function renderTip(tip){
     buildDivs(tip, sttip, tooltip, panelContainer, guideContent, popoverInner);
     
     // ----- choosing the correct type and inserts to the html ----- // 
-    // if it returns false - no more tips - nothing to render
+    // if it returns false - the type was not found - nothing to render
     if(!insertType(type, tiplates, popoverInner)){
         return;
     }
