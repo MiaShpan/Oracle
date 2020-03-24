@@ -2,7 +2,7 @@ This code renders guide tips on the google.com page.
 
 jQuery is loaded to the HTML of google.com
 
-The code reads the given JSON file from the URL ("https://guidedlearning.oracle..."), where each step in the file represents a tip.
+The code reads the given JSON file from the URL ("https://guidedlearning.oracle.com/player/latest/api/scenario/get/v_IlPvRLRWObwLnV5sTOaw/5szm2kaj/?callback=__5szm2kaj&refresh=true&env=dev&type=startPanel&vars%5Btype%5D=startPanel&sid=none&_=1582203987867"), where each step in the file represents a tip.
 
 The CSS given in the JSON file is loaded into the HTML of google.com
 
@@ -12,8 +12,7 @@ If it is not the first run of the code, the tip with the id that is saved in the
 
 The tips are rendered through the renderTip() function.
 
-For each tip, based on the tip type, an HTML element will 
-be created and added to the HTML page of google.com.
+For each tip, based on the tip type, an HTML element will be created and added to the HTML page of google.com.
 
 The element is taken from the tiplates in the JSON file and based on the tip "type".
 
@@ -23,7 +22,7 @@ The text of the tip and step number is also taken from the JSON file and rendere
 
 The tip position is set to be its "selector" position.
 
-If the next button is shown (no class specify to hide the button), when the user presses the next button, a function is called that finds the next tip and sends it to the renderTip() function, same for the back button.
+If the next button is shown (no class specify to hide the button), when the user presses the next button, a function is called with the id of the next tip, the function finds the next tip and sends it to the renderTip() function, same for the back button.
 
 If the tip was the first tip or the last one and there is no previous or next tip, a message will be shown on the screen.
 
@@ -34,16 +33,17 @@ If a class that hides the next button is specified only the selector will act as
 If the "selector" directs to a new page, the id of the tip that needs to be rendered is saved in sessionStorage and will be loaded and rendered when the code is reloaded.
 
 For setting up just copy the player.js code and paste it in the chrome js console and press enter(:
-For automatic loading of the script use Tampermonkey for the URLs: 
-* https://www.google.com/
-* https://www.google.com/imghp?hl=en&tab=wi&ogbl 
 If you are redirected to a new page:
 1. Make sure you are in the same domain (google.com and not co.il)
 2. Paste the code again in the console and press enter
 
+For automatic loading of the script use Tampermonkey for the URLs: 
+* https://www.google.com/
+* https://www.google.com/imghp?hl=en&tab=wi&ogbl 
+
 To test the solution you can  write your own newTip in the console after loading the code and closing the rendered tip, then call the renderTip(newTip). 
 Try sending a null tip, changing selectors, text, classes, placements and removing some needed attributes. 
-Make sure you use the same pattern as in the json file.
+Make sure you use the same pattern as in the JSON file.
 {
     "id": "", 
     "action": {
@@ -61,7 +61,7 @@ Make sure you use the same pattern as in the json file.
         }
     ]
 }
-You can also insert a different link in the code under "// json link", or change the json file in the original link.
+You can also insert a different link in the code under "// json link", or change the JSON file in the original link.
 (Make sure the first line in the file is __5szm2kaj({)
 
 
